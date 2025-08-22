@@ -1,9 +1,20 @@
 # UND_EDUBot Overview
 
-Parts list and build instructions can be found in the Build folder
+We reccomend first building the robot then diving into the software.
 
-The readme for setting up the software on the pi is found in the Software folder
+Simulation of the robot on your computer can be a good way to gain familiarity with ROS2 before trying to control the robot.
 
+## Build the robot
+
+3d print the components
+
+Solder the pins onto the motor controller
+
+Solder leads onto the encoders
+
+Assemble the components
+
+Wiring diagram to follow 
 
 ![App Screenshot](Photos/wiring_diagram_V1.png)
 
