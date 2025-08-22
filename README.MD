@@ -14,7 +14,7 @@ Solder leads onto the encoders
 
 Assemble the components
 
-Wiring diagram to follow 
+## Wiring diagram to follow 
 
 ![App Screenshot](Photos/wiring_diagram_V1.png)
 
