@@ -1,0 +1,81 @@
+{
+    "name": "ROS 2 Development Container",
+    "privileged": true,
+    // rosdev has some issues with gpiomem etc... instead of mucking about with some shit, just change user
+    "remoteUser": "rosdev",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            "USERNAME": "rosdev"
+        }
+    },
+    "workspaceFolder": "/home/rosdev/ws",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/home/rosdev/ws/src,type=bind",
+    "customizations": {
+        "vscode": {
+            "extensions":[
+                "ms-vscode.cpptools",
+                "ms-vscode.cpptools-themes",
+                "twxs.cmake",
+                "donjayamanne.python-extension-pack",
+                "eamodio.gitlens",
+                "ms-iot.vscode-ros"
+            ]
+        }
+    },
+    "containerEnv": {
+        "DISPLAY": "${localEnv:DISPLAY}"
+        //"DISPLAY": "unix:0"
+        //,"ROS_AUTOMATIC_DISCOVERY_RANGE": "LOCALHOST"
+        //,"ROS_DOMAIN_ID": "42"
+    },
+    "runArgs": [
+        "--privileged",
+        "--net=host",
+        "--pid=host",
+        "--ipc=host",
+        "--device=/dev/gpiomem0:/dev/gpiomem",    // Mount GPIO memory device
+        // changes
+        "--device=/dev/gpiomem1",    // Mount GPIO memory device
+        "--device=/dev/gpiomem2",    // Mount GPIO memory device
+        "--device=/dev/gpiomem3",    // Mount GPIO memory device
+        "--device=/dev/gpiomem4",    // Mount GPIO memory device
+
+        // end changes
+        "--device=/dev/gpiochip0",
+        // changes
+        "--device=/dev/gpiochip10",
+        "--device=/dev/gpiochip11",
+        "--device=/dev/gpiochip12",
+        "--device=/dev/gpiochip13",
+
+        // end changes
+        "--device=/dev/ttyUSB0",
+        "--device=/dev/ttyAMA0",
+        "--device=/dev/ttyS0",
+        "--device=/dev/mem",        // Mount memory device for low-level access
+        "--device=/dev/i2c-1",
+        "--device=/dev/i2c-4",
+        "-e","--env=DISPLAY=${env:DISPLAY}",
+        // "-v", "/tmp/.X11-unix:/tmp/.X11-unix"
+        //"--env=QT_X11_NO_MITSHM=1",
+        "--volume=/tmp/.X11-unix:/tmp/.X11-unix"
+        //"--volume=/etc/localtime:/etc/localtime:ro"
+
+    ],
+    "mounts": [
+    //    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
+       "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached",
+       "source=/dev/gpiochip0,target=/dev/gpiochip0,type=bind",
+       "source=/sys/class/gpio,target=/sys/class/gpio,type=bind",
+       "source=/sys/class/pwm,target=/sys/class/pwm,type=bind",
+       "source=/dev,target=/dev,type=bind",
+       //"source=/dev/i2c-1,target=/dev/i2c-1,type=build",
+       "source=/proc/device-tree,target=/proc/device-tree,type=bind,readonly",
+       "source=/boot,target=/boot,type=bind,readonly"
+
+    ],
+    
+    "postCreateCommand": "sudo rosdep update && sudo rosdep install --from-paths src --ignore-src -y && sudo chown -R $(whoami) /home/rosdev/",
+    "postStartCommand": "sudo chmod 777 /dev/ttyUSB0"
+}
